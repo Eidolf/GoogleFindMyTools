@@ -3,6 +3,7 @@ FROM python:3.11-slim
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     wget \
+    git \
     gnupg \
     unzip \
     xvfb \
@@ -28,7 +29,17 @@ RUN apt-get update && apt-get install -y \
     libnspr4 \
     lsb-release \
     xdg-utils \
+    fluxbox \
+    x11vnc \
+    net-tools \
+    python3-websockify \
+    python3-numpy \
     --no-install-recommends
+
+# Install noVNC
+RUN git clone https://github.com/novnc/noVNC.git /opt/novnc && \
+    git clone https://github.com/novnc/websockify /opt/novnc/utils/websockify && \
+    ln -s /opt/novnc/vnc.html /opt/novnc/index.html
 
 # Install Google Chrome Beta
 RUN wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /usr/share/keyrings/google-linux-signing-key.gpg && \

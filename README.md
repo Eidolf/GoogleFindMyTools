@@ -44,6 +44,24 @@ This is the easiest way to run the tool, especially if you have issues with Chro
     - The authentication secrets are saved to `Auth/secrets.json` on your host machine.
     - **Pro Tip:** If you only need the `secrets.json`, start the script, login, and when asked to proceed with listing devices, press `q` to exit. You will have your clean `secrets.json` file ready.
 
+### Home Assistant Add-on
+
+This tool can also be run directly as a Home Assistant Add-on.
+
+**Installation:**
+1.  Go to **Settings > Add-ons > Add-on Store**.
+2.  Click the **3 dots** (top right) > **Repositories**.
+3.  Add the URL of this repository: `https://github.com/Eidolf/GoogleFindMyTools`
+4.  Install the "Google Find My Tools" add-on.
+
+**Usage:**
+1.  Start the add-on.
+2.  Click **OPEN WEB UI** to see the desktop environment.
+3.  Login to Chrome when prompted.
+4.  Once authenticated, you can either continue or quit (`q` in terminal or close window).
+5.  **Secrets:** The `secrets.json` file will be automatically copied to your HA shares directory: `/share/google_find_my_secrets.json`.
+
+
 ### Authentication
 
 On the first run, an authentication sequence is executed, which requires a computer with access to Google Chrome.
