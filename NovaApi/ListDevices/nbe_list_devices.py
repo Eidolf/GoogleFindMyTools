@@ -40,7 +40,25 @@ def create_device_list_request():
     return hex_payload
 
 
+from Auth.adm_token_retrieval import get_adm_token
+from Auth.username_provider import get_username
+import sys
+
+
 def list_devices():
+    print("Checking authentication...")
+    try:
+        get_adm_token(get_username())
+    except Exception as e:
+        print(f"Authentication failed: {e}")
+        return
+
+    print("Authentication successful. Secrets are generated/loaded.")
+    val = input("Press Enter to proceed with listing devices, or 'q' to exit: ")
+    if val.lower() in ['q', 'quit', 'exit']:
+        print("Exiting.")
+        sys.exit(0)
+
     print("Loading...")
     result_hex = request_device_list()
 

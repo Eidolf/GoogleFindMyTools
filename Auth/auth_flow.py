@@ -14,12 +14,18 @@ def request_oauth_account_token_flow():
     """)
 
     # Press enter to continue
-    input("[AuthFlow] Press Enter to continue...")
+    user_input = input("[AuthFlow] Press Enter to continue (or type 'q' to exit)...")
+    if user_input.lower() in ['q', 'exit', 'quit']:
+        print("[AuthFlow] Exiting...")
+        import sys
+        sys.exit(0)
 
     # Automatically install and set up the Chrome driver
     print("[AuthFlow] Installing ChromeDriver...")
 
     driver = create_driver()
+
+    from selenium.common.exceptions import WebDriverException
 
     try:
         # Open the browser and navigate to the URL
@@ -27,9 +33,14 @@ def request_oauth_account_token_flow():
 
         # Wait until the "oauth_token" cookie is set
         print("[AuthFlow] Waiting for 'oauth_token' cookie to be set...")
-        WebDriverWait(driver, 300).until(
-            lambda d: d.get_cookie("oauth_token") is not None
-        )
+        try:
+            WebDriverWait(driver, 300).until(
+                lambda d: d.get_cookie("oauth_token") is not None
+            )
+        except WebDriverException:
+            print("[AuthFlow] Browser closed or connection lost. Exiting...")
+            import sys
+            sys.exit(0)
 
         # Get the value of the "oauth_token" cookie
         oauth_token_cookie = driver.get_cookie("oauth_token")
@@ -40,9 +51,17 @@ def request_oauth_account_token_flow():
 
         return oauth_token_value
 
+    except Exception as e:
+        print(f"[AuthFlow] An unexpected error occurred: {e}")
+        import sys
+        sys.exit(1)
+
     finally:
         # Close the browser
-        driver.quit()
+        try:
+            driver.quit()
+        except:
+            pass
 
 if __name__ == '__main__':
     request_oauth_account_token_flow()

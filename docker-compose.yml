@@ -1,0 +1,11 @@
+services:
+  google-find-my-tools:
+    build: .
+    volumes:
+      - ./Auth:/app/Auth
+      - /tmp/.X11-unix:/tmp/.X11-unix
+    environment:
+      - DISPLAY=${DISPLAY}
+    network_mode: "host"
+    stdin_open: true # docker run -i
+    tty: true # docker run -t
