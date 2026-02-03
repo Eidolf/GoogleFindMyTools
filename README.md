@@ -20,6 +20,30 @@ Currently, it is possible to query Find My Device / Find Hub trackers and Androi
 - Install the latest version of Google Chrome: https://www.google.com/chrome/
 - Start the program by running [main.py](main.py): `python main.py` or `python3 main.py`
 
+### Running with Docker (Recommended for Linux)
+
+This is the easiest way to run the tool, especially if you have issues with Chrome versions. This setup uses **Google Chrome Beta** (v145+) automatically.
+
+**Prerequisites:**
+- A Linux system with a graphical desktop environment (X11).
+- Docker and Docker Compose installed.
+
+**How to run:**
+1.  Run the helper script:
+    ```bash
+    ./run_docker.sh
+    ```
+    This script handles X11 forwarding permissions automatically so Chrome can open on your screen.
+
+2.  **Authentication:**
+    - A Chrome window will open. Login to your Google account.
+    - **Do not close the browser manually** - the script will close it when finished.
+    - If you want to cancel, press `q` in the terminal or close the Chrome window.
+
+3.  **Secrets:**
+    - The authentication secrets are saved to `Auth/secrets.json` on your host machine.
+    - **Pro Tip:** If you only need the `secrets.json`, start the script, login, and when asked to proceed with listing devices, press `q` to exit. You will have your clean `secrets.json` file ready.
+
 ### Authentication
 
 On the first run, an authentication sequence is executed, which requires a computer with access to Google Chrome.
