@@ -48,18 +48,22 @@ This is the easiest way to run the tool, especially if you have issues with Chro
 
 This tool can also be run directly as a Home Assistant Add-on.
 
+### Home Assistant Add-on
+
+I have created a dedicated Add-ons repository for Home Assistant.
+
 **Installation:**
 1.  Go to **Settings > Add-ons > Add-on Store**.
 2.  Click the **3 dots** (top right) > **Repositories**.
-3.  Add the URL of this repository: `https://github.com/Eidolf/GoogleFindMyTools`
+3.  Add the URL of my Add-ons repository:
+    `https://github.com/Eidolf/hassio-addons`
 4.  Install the "Google Find My Tools" add-on.
 
 **Usage:**
 1.  Start the add-on.
 2.  Click **OPEN WEB UI** to see the desktop environment.
 3.  Login to Chrome when prompted.
-4.  Once authenticated, you can either continue or quit (`q` in terminal or close window).
-5.  **Secrets:** The `secrets.json` file will be automatically copied to your HA shares directory: `/share/google_find_my_secrets.json`.
+4.  **Secrets:** The `secrets.json` file will be automatically copied to your HA shares directory: `/share/google_find_my_secrets.json`.
 
 
 ### Authentication
