@@ -288,7 +288,8 @@ class FcmRegister:
     async def fcm_install_and_register(
         self, gcm_data: dict[str, Any], keys: dict[str, Any]
     ) -> dict[str, Any] | None:
-        if installation := await self.fcm_install():
+        installation = await self.fcm_install()
+        if installation:
             registration = await self.fcm_register(gcm_data, installation, keys)
             return {
                 "registration": registration,

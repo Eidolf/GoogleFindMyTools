@@ -127,14 +127,29 @@ class FcmReceiver:
         # Register for FCM first (blocking)
         temp_loop = asyncio.new_event_loop()
         asyncio.set_event_loop(temp_loop)
-        temp_loop.run_until_complete(self._register_for_fcm())
-        temp_loop.close()
+        try:
+            temp_loop.run_until_complete(self._register_for_fcm())
+        except Exception as e:
+            print(f"[FCMReceiver] Warning: FCM registration failed: {e}")
+            print("[FCMReceiver] Using random fallback Android ID.")
+            # Create dummy credentials to allow the app to proceed without FCM
+            import secrets
+            rand_id = int(secrets.token_hex(8), 16)
+            self.credentials = {
+                'gcm': {'android_id': rand_id, 'security_token': 0},
+                'fcm': {'registration': {'token': 'dummy_token'}}
+            }
+            # Cache them so we don't retry every time
+            set_cached_value('fcm_credentials', self.credentials)
+        finally:
+            temp_loop.close()
 
-        # Now start the listener in the background loop
-        asyncio.run_coroutine_threadsafe(self.pc.start(), self._loop)
-        self._listening = True
-        print("[FCMReceiver] Listening for notifications. This can take a few seconds...")
-
+        # If we have valid credentials (or dummy ones), start listening
+        if self.credentials and 'fcm' in self.credentials and self.credentials['fcm']['registration']['token'] != 'dummy_token':
+            asyncio.run_coroutine_threadsafe(self.pc.start(), self._loop)
+            self._listening = True
+            print("[FCMReceiver] Listening for notifications. This can take a few seconds...")
+        
         return self.credentials['gcm']['android_id']
 
 
