@@ -783,8 +783,8 @@ class FcmPushClient:  # pylint:disable=too-many-instance-attributes
 
     async def stop(self) -> None:
         if (
-            self.stopping_lock
-            and self.stopping_lock.locked()
+            self.stopping_lock is None
+            or self.stopping_lock.locked()
             or self.run_state
             in (
                 FcmPushClientRunState.STOPPING,

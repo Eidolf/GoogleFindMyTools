@@ -65,30 +65,40 @@ def list_devices():
     device_list = parse_device_list_protobuf(result_hex)
 
     refresh_custom_trackers(device_list)
-    canonic_ids = get_canonic_ids(device_list)
+    while True:
+        canonic_ids = get_canonic_ids(device_list)
 
-    print("")
-    print("-" * 50)
-    print("Welcome to GoogleFindMyTools!")
-    print("-" * 50)
-    print("")
-    print("The following trackers are available:")
+        print("")
+        print("-" * 50)
+        print("Welcome to GoogleFindMyTools!")
+        print("-" * 50)
+        print("")
+        print("The following trackers are available:")
 
-    for idx, (device_name, canonic_id) in enumerate(canonic_ids, start=1):
-        print(f"{idx}. {device_name}: {canonic_id}")
+        for idx, (device_name, canonic_id) in enumerate(canonic_ids, start=1):
+            print(f"{idx}. {device_name}: {canonic_id}")
 
-    selected_value = input("\nIf you want to see locations of a tracker, type the number of the tracker and press 'Enter'.\nIf you want to register a new ESP32- or Zephyr-based tracker, type 'r' and press 'Enter': ")
+        selected_value = input("\nIf you want to see locations of a tracker, type the number of the tracker and press 'Enter'.\nIf you want to register a new ESP32- or Zephyr-based tracker, type 'r'.\nTo exit, type 'q': ")
 
-    if selected_value == 'r':
-        print("Loading...")
-        register_esp32()
-    else:
-        selected_idx = int(selected_value) - 1
-        selected_device_name = canonic_ids[selected_idx][0]
-        selected_canonic_id = canonic_ids[selected_idx][1]
+        if selected_value.lower() in ['q', 'quit', 'exit']:
+            print("Exiting.")
+            sys.exit(0)
+        elif selected_value == 'r':
+            print("Loading...")
+            register_esp32()
+            print("\nPress 'Enter' to return to the device list...")
+            input()
+        else:
+            try:
+                selected_idx = int(selected_value) - 1
+                if 0 <= selected_idx < len(canonic_ids):
+                    selected_device_name = canonic_ids[selected_idx][0]
+                    selected_canonic_id = canonic_ids[selected_idx][1]
 
-        get_location_data_for_device(selected_canonic_id, selected_device_name)
-
-
-if __name__ == '__main__':
-    list_devices()
+                    get_location_data_for_device(selected_canonic_id, selected_device_name)
+                    print("\nPress 'Enter' to return to the device list...")
+                    input()
+                else:
+                    print("Invalid selection. Please try again.")
+            except ValueError:
+                print("Invalid input. Please enter a valid number or 'r'/'q'.")
